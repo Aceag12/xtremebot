@@ -74,14 +74,20 @@ async def avatar(ctx, user: discord.Member=None):
         await client.say(embed=embed)  
 
 @client.command(pass_context=True)
-async def serverlist(ctx):
-    if ctx.message.author.id == '519122918773620747' or '460108004835065866':
+async def servers(ctx):
+    if ctx.message.author.id == '519122918773620747':
         servers = '\n'.join([i.name for i in client.servers]).strip('\n')
         await client.say('**I am currently on these servers:**\n ```bf\n{}```'.format(servers))
     else:
         await client.say('This command is for bot owner only.')        
-
       
+@client.command(pass_context=True)
+async def serverlist(ctx):
+    if ctx.message.author.id == '460108004835065866':
+        servers = '\n'.join([i.name for i in client.servers]).strip('\n')
+        await client.say('**I am currently on these servers:**\n ```bf\n{}```'.format(servers))
+    else:
+        await client.say('This command is for bot owner only.')      
       
 @client.command(pass_context=True)      
 async def guildinfo(ctx):
