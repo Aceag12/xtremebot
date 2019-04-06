@@ -67,8 +67,7 @@ async def guildinfo(ctx):
     r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
     join = discord.Embed(description= '%s '%(str(server)),title = 'Server Name', color = discord.Color((r << 16) + (g << 8) + b));
     join.set_thumbnail(url = server.icon_url);
-    join.add_field(name = '__Server Owner__', value = str(server.owner)
-    join.add_field(name = '__Owner ID__', value = str(server.owner.id))
+    join.add_field(name = '__Server Owner {0}__'.format(server.owner.id), value = str(server.owner)
     join.add_field(name = '__Server ID__', value = str(server.id))
     join.add_field(name = '__Members Count Of This Server__', value = str(server.member_count));
     join.add_field(name = '__Text/Voice Channels in this server__', value = str(channelz));
