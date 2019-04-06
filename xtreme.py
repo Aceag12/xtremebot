@@ -68,7 +68,7 @@ async def guildinfo(ctx):
     join = discord.Embed(description= '%s '%(str(server)),title = 'Server Name', color = discord.Color((r << 16) + (g << 8) + b));
     join.set_thumbnail(url = server.icon_url);
     join.add_field(name = '__Server Owner {0}__'.format(server.owner.id), value = str(server.owner)
-    join.add_field(name = '__Server ID__', value = str(server.id))
+    join.add_field(name = '__Server ID__', value = '{}'.format(server.id))
     join.add_field(name = '__Members Count Of This Server__', value = str(server.member_count));
     join.add_field(name = '__Text/Voice Channels in this server__', value = str(channelz));
     join.add_field(name = '__Available Roles (%s)__'%str(role_length), value = roles);
