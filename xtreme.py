@@ -64,6 +64,54 @@ async def help(ctx):
         await client.say(embed=embed)
 
 @client.event
+async def on_message_delete(message):
+    if not message.author.bot:
+      channelname = '〚📑〛extreme-logs'
+      logchannel=None
+      for channel in message.server.channels:
+        if channel.name == channelname:
+          user = message.author
+      for channel in message.author.server.channels:
+        if channel.name == '〚📑〛extreme-logs':
+          logchannel = channel
+          r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+          embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
+          embed.set_author(name='Message deleted')
+          embed.add_field(name = 'User: **{0}**'.format(user.name),value ='UserID: **{}**'.format(user.id),inline = False)
+          embed.add_field(name = 'Message:',value ='{}'.format(message.content),inline = False)
+          embed.add_field(name = 'Channel:',value ='{}'.format(message.channel.name),inline = False)
+          await client.send_message(logchannel,  embed=embed)
+          
+          
+@client.event
+async def on_reaction_add(reaction, user: discord.Member=None):
+  for channel in user.server.channels:
+    if channel.name == '〚📑〛extreme-logs':
+        logchannel = channel
+        r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+        embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
+        embed.set_author(name='Reaction Added')
+        embed.add_field(name = 'User: **{0}**'.format(user.name),value ='UserID: **{}**'.format(user.id),inline = False)
+        embed.add_field(name = 'Message:',value ='{}'.format(reaction.message.content),inline = False)
+        embed.add_field(name = 'Channel:',value ='{}'.format(reaction.message.channel.name),inline = False)
+        embed.add_field(name = 'Emoji:',value ='{}'.format(reaction.emoji),inline = False)
+        await client.send_message(logchannel,  embed=embed)
+        
+@client.event
+async def on_reaction_remove(reaction, user: discord.Member=None):
+  for channel in user.server.channels:
+    if channel.name == '〚📑〛extreme-logs':
+        logchannel = channel
+        r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+        embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
+        embed.set_author(name='Reaction Removed')
+        embed.add_field(name = 'User: **{0}**'.format(user.name),value ='UserID: **{}**'.format(user.id),inline = False)
+        embed.add_field(name = 'Message:',value ='{}'.format(reaction.message.content),inline = False)
+        embed.add_field(name = 'Channel:',value ='{}'.format(reaction.message.channel.name),inline = False)
+        embed.add_field(name = 'Emoji:',value ='{}'.format(reaction.emoji),inline = False)
+        await client.send_message(logchannel,  embed=embed)        
+        
+@client.event
 async def on_message_edit(before, after):
     if before.content == after.content:
       return
