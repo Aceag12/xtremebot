@@ -85,4 +85,25 @@ async def on_message_edit(before, after):
             embed.timestamp = datetime.datetime.utcnow()
             await client.send_message(channel, embed=embed)
 
+@client.command(pass_context=True)
+async def invite(ctx):
+    if ctx.message.author.bot:
+        return
+    else: 
+        r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+        embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
+        embed.add_field(name = '__**INVITE LINK:**__',value ='https://discordapp.com/oauth2/authorize?client_id=563659787607343135&scope=bot&permissions=2146958591',inline = False)  
+        await client.say(embed=embed)
+        
+@client.command(pass_context=True)
+async def botinfo(ctx):
+    if ctx.message.author.bot:
+        return
+    else: 
+        r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+        embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
+        embed.add_field(name = '__**BOT INFO:**__',value ='This is a bot created by  Ash Ketchum#4757 and ALISTORM#2930 together they worked on me and made me. I am made through python and have cool command so test them all.',inline = False)  
+        embed.add_field(name = '__**JOIN OUR OFFICIAL GUILD:**__',value ='https://discord.gg/XB3zwXs',inline = False)  
+        await client.say(embed=embed)        
+            
 client.run('NTYzNjU5Nzg3NjA3MzQzMTM1.XKg2vQ.9T2sTj8yi12RFqxBUvpCQBnrH1k')
