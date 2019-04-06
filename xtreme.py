@@ -72,7 +72,43 @@ async def avatar(ctx, user: discord.Member=None):
         embed.set_footer(text=f'Requested by: {ctx.message.author.display_name}', icon_url=f'{ctx.message.author.avatar_url}')
         embed.set_image(url = user.avatar_url)
         await client.say(embed=embed)  
-    
+
+@client.command(pass_context=True)
+async def serverlist(ctx):
+    if ctx.message.author.id == '519122918773620747' or '460108004835065866':
+        servers = '\n'.join([i.name for i in client.servers]).strip('\n')
+        await client.say('**I am currently on these servers:**\n ```bf\n{}```'.format(servers))
+    else:
+        await client.say('This command is for bot owner only.')        
+
+      
+      
+@client.command(pass_context=True)      
+async def guildinfo(ctx):
+
+    server = ctx.message.server
+    roles = [x.name for x in server.role_hierarchy]
+    role_length = len(roles)
+
+    if role_length > 50: 
+        roles = roles[:50]
+        roles.append('>>>> Displaying[50/%s] Roles'%len(roles))
+
+    roles = ', '.join(roles);
+    channelz = len(server.channels);
+    time = str(server.created_at); time = time.split(' '); time= time[0];
+    r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+    join = discord.Embed(description= '%s '%(str(server)),title = 'Server Name', color = discord.Color((r << 16) + (g << 8) + b));
+    join.set_thumbnail(url = server.icon_url);
+    join.add_field(name = '__Server Owner__', value = str(server.owner) + "\n **__Owner's ID__**  " + server.owner.id);
+    join.add_field(name = '__Server ID__', value = str(server.id))
+    join.add_field(name = '__Members Count Of This Server__', value = str(server.member_count));
+    join.add_field(name = '__Text/Voice Channels in this server__', value = str(channelz));
+    join.add_field(name = '__Available Roles (%s)__'%str(role_length), value = roles);
+    join.set_footer(text ='__Server was Created on__: %s'%time);
+
+    return await client.say(embed = join);      
+      
 @client.command(pass_context=True)
 async def pong(ctx):
     t = await client.say('Counting Latency...')
