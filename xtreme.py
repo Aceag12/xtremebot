@@ -52,15 +52,17 @@ async def setlogs(ctx):
 
 @client.command(pass_context=True)
 async def ping(ctx):
-    t = await Client.say('Pinging...')
+    t = await client.say('Counting Latency...')
     ms = (t.timestamp-ctx.message.timestamp).total_seconds() * 100
-    await client.edit_message(t, new_content='Pong! Time Taken: `{}ms`'.format(int(ms)))
+    await client.edit_message(t, new_content='Pong! Latency Took: `{}ms`'.format(int(ms)))
+    await client.send_typing(ctx.message.channel)
 
 @client.command(pass_context=True)
 async def pong(ctx):
-    t = await Client.say('Pinging...')
+    t = await client.say('Counting Latency...')
     ms = (t.timestamp-ctx.message.timestamp).total_seconds() * 100
-    await client.edit_message(t, new_content='Pong! Time Taken: `{}ms`'.format(int(ms)))    
+    await client.edit_message(t, new_content='Pong! Latency Took: `{}ms`'.format(int(ms)))
+    await client.send_typing(ctx.message.channel)
     
 @client.command(pass_context = True)
 async def help(ctx):
