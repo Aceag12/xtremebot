@@ -59,10 +59,10 @@ async def help(ctx):
         embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
         embed.set_author(name='HELP CENTER OF EXTREMEMODERATOR BOT')
         embed.set_thumbnail(url=ctx.message.server.icon_url)
-        embed.add_field(name = '__**COMING SOON:**__',value ='`COMING SOON!`',inline = False)
+        embed.add_field(name = '__**FOR LOGGING:**__',value ='`e.setlogs`',inline = False)
         embed.set_footer(text ='CREATED BY ALISTORM||ASH KETCHUM')
         await client.say(embed=embed)
-
+        
 @client.event
 async def on_message_delete(message):
     if not message.author.bot:
