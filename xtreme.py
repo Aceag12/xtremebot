@@ -303,6 +303,33 @@ async def on_message_edit(before, after):
             embed.timestamp = datetime.datetime.utcnow()
             await client.send_message(channel, embed=embed)
 
+@client.command(pass_context = True)
+@commands.has_permissions(kick_members=True)
+async def warn(ctx, userName: discord.User=None,*, message:str=None): 
+    if userName is None:
+      await client.say('Please tag a person to warn user. Example- **e.warn @user <reason>**')
+      return
+    if message is None:
+        await client.say('Please provide a reason to warn user. Example- **e.warn @user <reason>**')
+        return
+    if ctx.message.author.bot:
+        return
+    else:
+        await client.say("***:white_check_mark: Alright! {0} Has Been Warned for {1}.*** ".format(userName,message))
+        for channel in userName.server.channels:
+            if channel.name == '〚📑〛extreme-logs':
+                r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+                embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
+                embed.add_field(name = '__**USER WARNED:**__',value ='!Warning Logs!',inline = False)
+                embed.add_field(name = '__**WARNED USER:**__',value ='**{}**'.format(userName),inline = False)
+                embed.add_field(name = '__**WARNED USER ID:**__',value ='**{}**'.format(userName.id),inline = False)
+                embed.add_field(name = '__**WARNED BY:**__',value ='**{}**'.format(ctx.message.author),inline = False)
+                embed.add_field(name = '__**REASON:**__',value ='**{}**'.format(message),inline = False)
+                embed.add_field(name = '__**WARNED IN:**__',value ='**{}**'.format(ctx.message.channel),inline = False)
+                embed.timestamp = datetime.datetime.utcnow()
+                await client.send_message(channel, embed=embed)
+                await client.send_message(userName, "You have been warned in **{0}** for: **{1}**".format(ctx.message.server, message))
+            
 @client.command(pass_context=True)
 async def invite(ctx):
     if ctx.message.author.bot:
