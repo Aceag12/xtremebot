@@ -80,7 +80,103 @@ async def pong(ctx):
     ms = (t.timestamp-ctx.message.timestamp).total_seconds() * 100
     await client.edit_message(t, new_content='Pong! Latency Took: `{}ms`'.format(int(ms)))
     await client.send_typing(ctx.message.channel)
-    
+
+@client.command(pass_context = True)
+async def whois(ctx, user: discord.Member=None):
+    if user is None:
+      await client.say('Please tag a user to get user information. Example- ``ad!whois @user``')
+    if ctx.message.author.bot:
+      return
+    else:
+      r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+      embed = discord.Embed(title="{}'s info".format(user.name), description="Here is the detail of that user.", color = discord.Color((r << 16) + (g << 8) + b))
+      embed.add_field(name="__Name__", value=user.mention, inline=True)
+      embed.add_field(name="__USER ID__", value=user.id, inline=True)
+      embed.add_field(name="__Status__", value=user.status, inline=True)
+      embed.add_field(name="__Highest role__", value=user.top_role)
+      embed.add_field(name="__Color__", value=user.color)
+      embed.add_field(name="__Playing__", value=user.game)
+      embed.add_field(name="__Nickname__", value=user.nick)
+      embed.add_field(name="__Joined__", value=user.joined_at.strftime("%d %b %Y %H:%M"))
+      embed.add_field(name="__Created__", value=user.created_at.strftime("%d %b %Y %H:%M"))
+      embed.set_thumbnail(url=user.avatar_url)
+      await client.say(embed=embed) 
+      
+@client.group(pass_context=True, invoke_without_command=True)
+@commands.has_permissions(manage_nicknames=True)     
+async def setnickname(ctx, user: discord.Member=None, *, nickname=None):
+    member = user.name
+    if user is None:
+      await client.say('Please tag a person to change nickname. Example- `` ad!setnick @user <new nickname>``')
+      return
+    else:
+      await client.change_nickname(user, nickname)
+      await client.delete_message(ctx.message)
+      await client.say('Nickname was successfully changed.')
+
+@client.group(pass_context=True, invoke_without_command=True)
+@commands.has_permissions(manage_nicknames=True)     
+async def resetnickname(ctx, user: discord.Member=None):
+    member = user.name
+    if user is None:
+      await client.say('Please tag a person to reset nickname. Example- ``ad!resetnick @user``')
+      return
+    else:
+      nick = user.name
+      await client.change_nickname(user, nick)
+      await client.delete_message(ctx.message)
+      await client.say('Nickname reset was successful.')
+      
+@client.command(pass_context = True)
+async def channellock(ctx, channelname: discord.Channel=None):
+    overwrite = discord.PermissionOverwrite(send_messages=False, read_messages=True)
+    if not channelname:
+        role = discord.utils.get(ctx.message.server.roles, name='@everyone')
+        await client.edit_channel_permissions(ctx.message.channel, role, overwrite)
+        await client.say("{0} Just Locked {1}.".format(ctx.message.author, ctx.message.channel))
+    else:
+        if ctx.message.author.server_permissions.manage_channels == False:
+            await client.say('**You do not have `Manage Channels` permission to use this command.**')
+            return
+        else:
+            role = discord.utils.get(ctx.message.server.roles, name='@everyone')
+            await client.edit_channel_permissions(channelname, role, overwrite)
+            await client.say("{0} Just Locked {1}.".format(ctx.message.author, channelname))
+
+@client.command(pass_context = True)
+async def channelunlock(ctx, channelname: discord.Channel=None):
+    overwrite = discord.PermissionOverwrite(send_messages=None, read_messages=True)
+    if not channelname:
+        if ctx.message.author.server_permissions.manage_channels == False:
+            await client.say('**You do not have `Manage Channels` permission to use this command**')
+            return
+        else:
+            role = discord.utils.get(ctx.message.server.roles, name='@everyone')
+            await client.edit_channel_permissions(ctx.message.channel, role, overwrite)
+            await client.say("{0} Unlocked {1}.".format(ctx.message.author, ctx.message.channel))
+    else:
+        if ctx.message.author.server_permissions.manage_channels == False:
+            await client.say('**You do not have `Manage Channels` permission to use this command**')
+            return
+        else:
+            role = discord.utils.get(ctx.message.server.roles, name='@everyone')
+            await client.edit_channel_permissions(channelname, role, overwrite)
+            await client.say("{0} Unlocked {1}".format(ctx.message.author, channelname))
+            
+@client.command(pass_context = True)
+@commands.has_permissions(manage_messages = True)
+async def purge(ctx, number: int):
+  purge = await client.purge_from(ctx.message.channel, limit = number+1)
+  for channel in ctx.message.author.server.channels:
+        if channel.name == '〚📑〛extreme-logs':
+            r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+            embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
+            embed.set_author(name='Bulk Message Deleted')
+            embed.add_field(name = '__Commander:__ **{0}**'.format(ctx.message.author),value ='__Commander ID:__ **{}**'.format(ctx.message.author.id),inline = False)
+            embed.add_field(name = '__Channel:__',value ='{}'.format(ctx.message.channel),inline = False)
+            await client.send_message(channel, embed=embed)
+            await client.say('Purged **{}** Messages For You'.format(number))
+            
 @client.command(pass_context = True)
 async def help(ctx):
     if ctx.message.author.bot:
@@ -182,7 +278,7 @@ async def botinfo(ctx):
     else: 
         r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
         embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
-        embed.add_field(name = '__**BOT INFO:**__',value ='This is a bot created by  Ash Ketchum#4757 and ALISTORM#2930 together they worked on me and made me. I am made through python and have cool command so test them all.',inline = False)  
+        embed.add_field(name = '__**BOT INFO:**__',value ='This is a bot created by  Ash Ketchum#4757 and ALISTORM#2930 together. They worked Hard and made me. I am made through python and have cool command so test them all.',inline = False)  
         embed.add_field(name = '__**JOIN OUR OFFICIAL GUILD:**__',value ='https://discord.gg/XB3zwXs',inline = False)  
         await client.say(embed=embed)        
             
