@@ -58,6 +58,21 @@ async def ping(ctx):
     await client.edit_message(t, new_content='Pong! Latency Took: `{}ms`'.format(int(ms)))
     await client.send_typing(ctx.message.channel)
 
+@client.command(pass_context = True)
+async def avatar(ctx, user: discord.Member=None):
+    if user is None:
+        r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+        embed = discord.Embed(title=f'Discord Avatar Machine', description='**__Avatar of {0}:__**'.format(ctx.message.author), color = discord.Color((r << 16) + (g << 8) + b))
+        embed.set_footer(text=f'Requested by: {ctx.message.author.display_name}', icon_url=f'{ctx.message.author.avatar_url}')
+        embed.set_image(url = ctx.message.author.avatar_url)
+        await client.say(embed=embed)
+    else:
+        r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+        embed = discord.Embed(title=f'Avatar Machine', description="**__Avatar of {0}:__**".format(user), color = discord.Color((r << 16) + (g << 8) + b))
+        embed.set_footer(text=f'Requested by: {ctx.message.author.display_name}', icon_url=f'{ctx.message.author.avatar_url}')
+        embed.set_image(url = user.avatar_url)
+        await client.say(embed=embed)  
+    
 @client.command(pass_context=True)
 async def pong(ctx):
     t = await client.say('Counting Latency...')
@@ -75,7 +90,8 @@ async def help(ctx):
         embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
         embed.set_author(name='HELP CENTER OF EXTREMEMODERATOR BOT')
         embed.set_thumbnail(url=ctx.message.server.icon_url)
-        embed.add_field(name = '__**FOR LOGGING:**__',value ='`e.setlogs`',inline = False)
+        embed.add_field(name = '__**LOGGING:**__',value ='`e.setlogs`',inline = False)
+        embed.add_field(name = '__**AVATAR:**__',value ='`e.avatar`',inline = False)
         embed.set_footer(text ='CREATED BY ALISTORM||ASH KETCHUM')
         await client.say(embed=embed)
         
