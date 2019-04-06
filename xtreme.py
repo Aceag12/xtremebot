@@ -51,11 +51,17 @@ async def setlogs(ctx):
       await client.say('〚📑〛extreme-logs channel has been created.')
 
 @client.command(pass_context=True)
-async def ping_ms(ctx):
+async def ping(ctx):
     t = await Client.say('Pinging...')
-    ms = (t.timestamp-ctx.message.timestamp).total_seconds() * 1000
+    ms = (t.timestamp-ctx.message.timestamp).total_seconds() * 100
     await client.edit_message(t, new_content='Pong! Time Taken: `{}ms`'.format(int(ms)))
-      
+
+@client.command(pass_context=True)
+async def pong(ctx):
+    t = await Client.say('Pinging...')
+    ms = (t.timestamp-ctx.message.timestamp).total_seconds() * 100
+    await client.edit_message(t, new_content='Pong! Time Taken: `{}ms`'.format(int(ms)))    
+    
 @client.command(pass_context = True)
 async def help(ctx):
     if ctx.message.author.bot:
