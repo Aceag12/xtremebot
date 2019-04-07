@@ -351,4 +351,4 @@ async def botinfo(ctx):
         embed.add_field(name = '__**JOIN OUR OFFICIAL GUILD:**__',value ='https://discord.gg/XB3zwXs',inline = False)  
         await client.say(embed=embed)        
             
-client.run('NTYzNjU5Nzg3NjA3MzQzMTM1.XKg2vQ.9T2sTj8yi12RFqxBUvpCQBnrH1k')
+client.run(os.getenv('token'))
