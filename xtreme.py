@@ -228,10 +228,27 @@ async def help(ctx):
         embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
         embed.set_author(name='HELP CENTER OF EXTREMEMODERATOR BOT')
         embed.set_thumbnail(url=ctx.message.server.icon_url)
-        embed.add_field(name = '__**LOGGING:**__',value ='`e.setlogs`',inline = False)
-        embed.add_field(name = '__**AVATAR:**__',value ='`e.avatar`',inline = False)
+        embed.add_field(name = '__**Coming Soon:**__',value =':)',inline = False)
         embed.set_footer(text ='CREATED BY ALISTORM||ASH KETCHUM')
         await client.say(embed=embed)
+
+@client.command(pass_context = True)
+async def dm(ctx, user: discord.Member, *, msg: str):
+    if ctx.message.author.bot:
+        return
+    else:
+        if msg is None:
+            await client.say('Invalid command. Use this command like: ``e.dm @user message``') 	
+        else:
+            r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+            embed=discord.Embed(title="**__You Got Message!__**", description="**{0}** sent you dm from **{1}**!".format(ctx.message.author.name, ctx.message.server), color = discord.Color((r << 16) + (g << 8) + b))
+            embed.add_field(name = '__**Message:**__',value ='***{}***'.format(msg),inline = False)
+            embed.set_thumbnail(url=ctx.message.author.avatar_url)
+            embed.set_footer(text=f'Sent by: {ctx.message.author.display_name}', icon_url=f'{ctx.message.author.avatar_url}')
+            embed.timestamp = datetime.datetime.utcnow()
+            await client.send_message(user, embed=embed)
+            await client.delete_message(ctx.message)          
+            await client.say(" :white_check_mark: Success! Your DMs is done.")        
         
 @client.event
 async def on_message_delete(message):
@@ -329,7 +346,22 @@ async def warn(ctx, userName: discord.User=None,*, message:str=None):
                 embed.timestamp = datetime.datetime.utcnow()
                 await client.send_message(channel, embed=embed)
                 await client.send_message(userName, "You have been warned in **{0}** for: **{1}**".format(ctx.message.server, message))
-            
+
+@client.command(pass_context=True)
+async def miniavatar(ctx, user:discord.Member=None):
+    if user is None:
+        r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+        embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
+        embed.set_author(name='User Avatar')
+        embed.set_thumbnail(url = ctx.message.author.avatar_url)
+        await client.send_message(ctx.message.channel, embed=embed)
+    else:
+       r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
+       embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
+       embed.set_author(name='User Avatar')
+       embed.set_thumbnail(url = user.avatar_url)
+       await client.send_message(ctx.message.channel, embed=embed)                
+                
 @client.command(pass_context=True)
 async def invite(ctx):
     if ctx.message.author.bot:
