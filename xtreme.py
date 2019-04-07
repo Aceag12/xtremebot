@@ -30,9 +30,9 @@ async def status_task():
 
 @client.event
 async def on_ready():
-    print('the bot is ready')
-    print(client.user.name)
-    print(client.user.id)
+    print('bot is ready')
+    print('created by alistorm and ash ketchum')
+    print('extrememoderator')
     print('working properly')
     client.loop.create_task(status_task())
 
@@ -380,7 +380,7 @@ async def botinfo(ctx):
         r, g, b = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1))
         embed = discord.Embed(color = discord.Color((r << 16) + (g << 8) + b))
         embed.add_field(name = '__**BOT INFO:**__',value ='This is a bot created by  Ash Ketchum#4757 and ALISTORM#2930 together. They worked Hard and made me. I am made through python and have cool command so test them all.',inline = False)  
-        embed.add_field(name = '__**JOIN OUR OFFICIAL GUILD:**__',value ='https://discord.gg/XB3zwXs',inline = False)  
+        embed.add_field(name = '__**JOIN OUR OFFICIAL GUILD:**__',value ='https://discord.gg/fGtNgJ7',inline = False)  
         await client.say(embed=embed)        
             
 client.run(os.getenv('token'))
